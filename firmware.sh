@@ -64,8 +64,8 @@ fi
 
 #download SeaBIOS update
 echo_yellow "\nDownloading RW_LEGACY firmware update\n(${seabios_file})"
-curl -s -L -O ${rwlegacy_source}${seabios_file}.md5
-curl -s -L -O ${rwlegacy_source}${seabios_file}
+curl -k -s -L -O ${rwlegacy_source}${seabios_file}.md5
+curl -k -s -L -O ${rwlegacy_source}${seabios_file}
 #verify checksum on downloaded file
 md5sum -c ${seabios_file}.md5 --quiet 2> /dev/null
 [[ $? -ne 0 ]] && { exit_red "RW_LEGACY download checksum fail; download corrupted, cannot flash"; return 1; }
@@ -74,9 +74,9 @@ md5sum -c ${seabios_file}.md5 --quiet 2> /dev/null
 if [ "$preferUSB" = true  ]; then
     #swanky special case
     if [[ "$device" = "swanky" ]]; then
-    	curl -s -L -o bootorder "${cbfs_source}bootorder.usb2"
+    	curl -k -s -L -o bootorder "${cbfs_source}bootorder.usb2"
     else
-	curl -s -L -o bootorder "${cbfs_source}bootorder.usb"
+	curl -k -s -L -o bootorder "${cbfs_source}bootorder.usb"
     fi
     if [ $? -ne 0 ]; then
         echo_red "Unable to download bootorder file; boot order cannot be changed."
@@ -87,7 +87,7 @@ if [ "$preferUSB" = true  ]; then
 fi
 #useHeadless?
 if [ "$useHeadless" = true  ]; then
-    curl -s -L -O "${cbfs_source}${hswbdw_headless_vbios}"
+    curl -k -s -L -O "${cbfs_source}${hswbdw_headless_vbios}"
     if [ $? -ne 0 ]; then
         echo_red "Unable to download headless VGA BIOS; headless firmware cannot be installed."
     else
@@ -346,8 +346,8 @@ fi
 #download firmware file
 cd /tmp
 echo_yellow "\nDownloading Full ROM firmware\n(${coreboot_file})"
-curl -s -L -O "${firmware_source}${coreboot_file}"
-curl -s -L -O "${firmware_source}${coreboot_file}.sha1"
+curl -k -s -L -O "${firmware_source}${coreboot_file}"
+curl -k -s -L -O "${firmware_source}${coreboot_file}.sha1"
 
 #verify checksum on downloaded file
 sha1sum -c ${coreboot_file}.sha1 --quiet > /dev/null 2>&1
@@ -360,7 +360,7 @@ fi
 
 #preferUSB?
 if [[ "$preferUSB" = true  && $useUEFI = false ]]; then
-	curl -s -L -o bootorder "${cbfs_source}bootorder.usb"
+	curl -k -s -L -o bootorder "${cbfs_source}bootorder.usb"
 	if [ $? -ne 0 ]; then
 	    echo_red "Unable to download bootorder file; boot order cannot be changed."
 	else
@@ -377,7 +377,7 @@ fi
 
 #useHeadless?
 if [ "$useHeadless" = true  ]; then
-    curl -s -L -O "${cbfs_source}${hswbdw_headless_vbios}"
+    curl -k -s -L -O "${cbfs_source}${hswbdw_headless_vbios}"
     if [ $? -ne 0 ]; then
         echo_red "Unable to download headless VGA BIOS; headless firmware cannot be installed."
     else
@@ -388,7 +388,7 @@ fi
 
 #addPXE?
 if [ "$addPXE" = true  ]; then
-    curl -s -L -O "${cbfs_source}${pxe_optionrom}"
+    curl -k -s -L -O "${cbfs_source}${pxe_optionrom}"
     if [ $? -ne 0 ]; then
         echo_red "Unable to download PXE option ROM; PXE capability cannot be added."
     else
@@ -503,8 +503,8 @@ the touchpad firmware, otherwise the touchpad will not work."
         [[ "$wpEnabled" = true ]] && { exit_red "\nHardware write-protect enabled, cannot downgrade touchpad firmware."; return 1; }
         # download TP firmware
         echo_yellow "\nDownloading touchpad firmware\n(${touchpad_eve_fw})"
-        curl -s -LO "${other_source}${touchpad_eve_fw}"
-        curl -s -LO "${other_source}${touchpad_eve_fw}.sha1"
+        curl -k -s -LO "${other_source}${touchpad_eve_fw}"
+        curl -k -s -LO "${other_source}${touchpad_eve_fw}.sha1"
         #verify checksum on downloaded file
         sha1sum -c ${touchpad_eve_fw}.sha1 --quiet > /dev/null 2>&1
         if [[ $? -eq 0 ]]; then
@@ -649,7 +649,7 @@ else
     fi
 
     #download shellball ROM
-    curl -s -L -o /tmp/stock-firmware.rom ${shellball_source}shellball.${_device}.bin;
+    curl -k -s -L -o /tmp/stock-firmware.rom ${shellball_source}shellball.${_device}.bin;
     [[ $? -ne 0 ]] && { exit_red "Error downloading; unable to restore stock firmware."; return 1; }
 
     #extract VPD if present
@@ -941,7 +941,7 @@ if [[ "$confirm" = "Y" || "$confirm" = "y" ]]; then
         exit_red "Error disabling software write-protect; unable to restore bitmaps."; return 1
     fi
     #download shellball
-    curl -s -L -o /tmp/shellball.rom ${shellball_source}shellball.${device}.bin;
+    curl -k -s -L -o /tmp/shellball.rom ${shellball_source}shellball.${device}.bin;
     [[ $? -ne 0 ]] && { exit_red "Error downloading shellball; unable to restore bitmaps."; return 1; }
     #extract GBB region, bitmaps
     ${cbfstoolcmd} /tmp/shellball.rom read -r GBB -f gbb.new >/dev/null 2>&1
@@ -989,8 +989,8 @@ read -ep "Do you wish to continue? [y/N] "
 cd /tmp
 
 #download SeaBIOS payload
-curl -s -L -O ${bootstub_source}/${bootstub_payload_baytrail}
-curl -s -L -O ${bootstub_source}/${bootstub_payload_baytrail}.md5
+curl -k -s -L -O ${bootstub_source}/${bootstub_payload_baytrail}
+curl -k -s -L -O ${bootstub_source}/${bootstub_payload_baytrail}.md5
 
 #verify checksum on downloaded file
 md5sum -c ${bootstub_payload_baytrail}.md5 --quiet > /dev/null 2>&1
@@ -1021,9 +1021,9 @@ fi
 #USB boot priority
 read -ep "Default to booting from USB? If N, always boot from internal storage unless selected from boot menu. [y/N] "
 if [[ "$REPLY" = "y" || "$REPLY" = "Y" ]]; then
-    curl -s -L -o bootorder ${cbfs_source}/bootorder.usb
+    curl -k -s -L -o bootorder ${cbfs_source}/bootorder.usb
 else
-    curl -s -L -o bootorder ${cbfs_source}/bootorder.emmc
+    curl -k -s -L -o bootorder ${cbfs_source}/bootorder.emmc
 fi
 
 
@@ -1120,7 +1120,7 @@ ${cbfstoolcmd} boot_stub.stock extract -n config -f config.${device} > /dev/null
 if [[ $? -ne 0 ]]; then
     echo_yellow "No valid BOOT_STUB backup found; attempting to download/extract from a shellball ROM"
     #download and extract from shellball ROM
-    curl -s -L -o /tmp/shellball.rom ${shellball_source}shellball.${device}.bin
+    curl -k -s -L -o /tmp/shellball.rom ${shellball_source}shellball.${device}.bin
     if [[ $? -ne 0 ]]; then
         exit_red "No valid BOOT_STUB backup found; error downloading shellball ROM; unable to restore stock BOOT_STUB."
         return 1

@@ -190,7 +190,7 @@ if [ ! -f ${cbfstoolcmd} ]; then
     fi
 
     #echo_yellow "Downloading cbfstool utility"
-    curl -sLO "${util_source}cbfstool.tar.gz"
+    curl -k -sLO "${util_source}cbfstool.tar.gz"
     if [ $? -ne 0 ]; then
         echo_red "Error downloading cbfstool; cannot proceed."
         #restore working dir
@@ -243,7 +243,7 @@ if [ ! -f ${flashromcmd} ]; then
         cd /tmp/boot/util
     fi
 
-    curl -sLO "${util_source}flashrom.tar.gz"
+    curl -k -sLO "${util_source}flashrom.tar.gz"
     if [ $? -ne 0 ]; then
         echo_red "Error downloading flashrom; cannot proceed."
         #restore working dir
@@ -275,7 +275,7 @@ if [ ! -f ${gbbutilitycmd} ]; then
     working_dir=`pwd`
     cd /tmp
 
-    curl -sLO "${util_source}gbb_utility.tar.gz"
+    curl -k -sLO "${util_source}gbb_utility.tar.gz"
     if [ $? -ne 0 ]; then
         echo_red "Error downloading gbb_utility; cannot proceed."
         #restore working dir
